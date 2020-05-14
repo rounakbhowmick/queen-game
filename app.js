@@ -1,10 +1,12 @@
-let x = 0,
-    y = 0;
-/*let queen = {
-    direction: 'S',
-    position: [4, 0]
-};*/
-
+let q;
+//Constructor
+function Queen(direction, position) {
+    this.direction = direction;
+    this.position = position;
+}
+//Object
+let white = new Queen("N", [0, 0]);
+let black = new Queen("S", [0, 0]);
 
 let positionLog =
 
@@ -26,106 +28,159 @@ let positionLog =
         ["a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"]
     ];
 
-function changedirection() {
-    while (1) {
-        let dir = prompt("Enter the direction");
-        let no = dir.slice(-1)
-        no = parseInt(no);
-        let newdir = dir.slice(0, -1)
-        newdir = newdir.toUpperCase();
+//System Queen
+function blackqueen() {
+    q = 2;
+    //Random direction generator
+    const dirgen = ['N', 'S', 'E', 'W', 'NE', 'NW', 'SE', 'SW']
+    let c = Math.floor(Math.random() * 8);
 
-        switch (newdir) {
-            case 'N':
-                console.log(y - no);
-                if (y - no < 0) {
-                    console.log("Outside boundary");
-                    continue;
-                } else {
-                    y -= no;
-                    break;
-                }
+    //Random steps generator (Generating from 1 to 8)
 
-                case 'S':
-                    if (y + no >= 8) {
-                        console.log("Outside boundary");
-                        continue;
-                    } else {
-                        y += no;
-                        break;
-                    }
+    let s = Math.floor(Math.random() * 8) + 1;
+    console.log(`Black Queen Direction: ${dirgen[c]} value:${s}`);
+    changedirection(dirgen[c], s);
 
-                    case 'E':
-
-                        if (x + no >= 8) {
-                            console.log("Outside boundary");
-                            continue;
-                        } else {
-                            x += no;
-                            break;
-                        }
-
-                        case 'W':
-                            if (x - no < 0) {
-                                console.log("Outside boundary");
-                                continue;
-                            } else {
-                                x -= no;
-                                break;
-                            }
-                            case 'NE':
-                                if ((x + no >= 8) && (x - no < 0)) {
-                                    console.log("Outside boundary");
-                                    continue;
-                                } else {
-                                    x += no;
-                                    y -= no;
-                                    break;
-                                }
-                                case 'NW':
-                                    if ((x - no < 0) && (y - no < 0)) {
-                                        console.log("Outside boundary");
-                                        continue;
-                                    } else {
-                                        x -= no;
-                                        y -= no;
-                                        break;
-                                    }
-                                    case 'SE':
-                                        if ((x + no >= 8) && (y + no >= 8)) {
-                                            console.log("Outside boundary");
-                                            continue;
-                                        } else {
-                                            x += no;
-                                            y += no;
-                                            break;
-                                        }
-                                        case 'SW':
-                                            if ((x - no < 0) && (y + no >= 8)) {
-                                                console.log("Outside boundary");
-                                                continue;
-                                            } else {
-                                                x -= no;
-                                                y += no;
-                                                break;
-                                            }
-                                            default:
-                                                console.log("Wrong direction value pressed");
-
-        }
-        /*queen.position[0] = x;
-        queen.position[1] = y;*/
-        console.log(y, x);
-        console.log("Current position of queen is ", positionLog[y][x]);
-        let cont = prompt("Do you want to continue");
-        if (cont == 'yes' || cont == 'YES') {
-            continue;
-        } else {
-            break;
-        }
-
-    }
 
 }
 
-changedirection();
-console.log(x, y);
+//User Queen
+function whitequeen() {
+    q = 1;
+    let dir = prompt("Enter the direction");
+    //Storing direction value like 1,2
+    let no = dir.slice(-1);
+    no = parseInt(no);
+    //Storing only direction like N,SE
+    let newdir = dir.slice(0, -1);
+    newdir = newdir.toUpperCase();
+    console.log(`White Queen Direction: ${newdir} value:${no}`);
+    changedirection(newdir, no);
+}
+//Checking both the queens are in same position or not
+function check() {
+    if ((white.position[0] == black.position[0]) && (white.position[1] == black.position[1])) {
+        console.log("Both queen are in same place");
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function game() {
+    while (1) {
+        whitequeen();
+        if (check()) {
+            break;
+        }
+        blackqueen();
+        if (check()) {
+            break;
+        }
+    }
+}
+
+
+function changedirection(newdir, no) {
+    if (q == 1) {
+        x = white.position[0];
+        y = white.position[1];
+    } else {
+        x = black.position[0];
+        y = black.position[1];
+    }
+    switch (newdir) {
+        case 'N':
+            console.log(y - no);
+            if (y - no < 0) {
+                console.log("Outside boundary");
+                return;
+            } else {
+                y -= no;
+                break;
+            }
+
+            case 'S':
+                if (y + no >= 8) {
+                    console.log("Outside boundary");
+                    return;
+                } else {
+                    y += no;
+                    break;
+                }
+
+                case 'E':
+
+                    if (x + no >= 8) {
+                        console.log("Outside boundary");
+                        return;
+                    } else {
+                        x += no;
+                        break;
+                    }
+
+                    case 'W':
+                        if (x - no < 0) {
+                            console.log("Outside boundary");
+                            return;
+                        } else {
+                            x -= no;
+                            break;
+                        }
+                        case 'NE':
+                            if ((x + no >= 8) && (x - no < 0)) {
+                                console.log("Outside boundary");
+                                return;
+                            } else {
+                                x += no;
+                                y -= no;
+                                break;
+                            }
+                            case 'NW':
+                                if ((x - no < 0) && (y - no < 0)) {
+                                    console.log("Outside boundary");
+                                    return;
+                                } else {
+                                    x -= no;
+                                    y -= no;
+                                    break;
+                                }
+                                case 'SE':
+                                    if ((x + no >= 8) && (y + no >= 8)) {
+                                        console.log("Outside boundary");
+                                        return;
+
+                                    } else {
+                                        x += no;
+                                        y += no;
+                                        break;
+                                    }
+                                    case 'SW':
+                                        if ((x - no < 0) && (y + no >= 8)) {
+                                            console.log("Outside boundary");
+                                            return;
+
+                                        } else {
+                                            x -= no;
+                                            y += no;
+                                            break;
+                                        }
+                                        default:
+                                            console.log("Wrong direction value pressed");
+
+    }
+    //Checking white or black queen and then inserting the new position
+    if (q == 1) { //White queen
+        white.position[0] = x;
+        white.position[1] = y;
+        console.log(white.position[0], white.position[1]);
+        console.log("Current position of White queen is ", positionLog[white.position[1]][white.position[0]]);
+    } else { //Black Queen
+        black.position[0] = x;
+        black.position[1] = y;
+        console.log(black.position[0], black.position[1]);
+        console.log("Current position of Black queen is ", positionLog[black.position[1]][black.position[0]]);
+    }
+
+}
+game();
